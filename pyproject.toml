@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-aoc = "aoc:main"
+aoc = "aoc.runner:main"
 scaffold = "aoc.scaffold:main"
 
 [build-system]
