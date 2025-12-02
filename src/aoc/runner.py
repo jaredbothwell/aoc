@@ -1,7 +1,4 @@
 
-
-
-
 import argparse
 from datetime import datetime
 import importlib
@@ -24,8 +21,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Run Advent of Code solution for a specific year and day."
     )
-    parser.add_argument("--year", type=Optional[int], help="Year of the Advent of Code")
-    parser.add_argument("--day", type=Optional[int], help="Day of the Advent of Code")
+    parser.add_argument("--year", type=int, help="Year of the Advent of Code")
+    parser.add_argument("--day", type=int, help="Day of the Advent of Code")
     args = parser.parse_args()
     year = args.year
     day = args.day
@@ -34,7 +31,7 @@ def main():
         if year is None: year = now.year
         if day is None: day = now.day
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     module_name, input_dir = get_solution_module(year, day)
     input_file = input_dir / "input.txt"

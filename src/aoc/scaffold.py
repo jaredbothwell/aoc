@@ -73,14 +73,14 @@ def main():
         description="Scaffold a new Advent of Code day directory structure."
     )
     parser.add_argument(
-        "--year", type=Optional[int], help="The year of the Advent of Code (default: current year)"
+        "--year", type=int, help="The year of the Advent of Code (default: current year)"
     )
     parser.add_argument(
-        "--day", type=Optional[int], help="The day of the Advent of Code (default: current day)",
+        "--day", type=int, help="The day of the Advent of Code (default: current day)",
     )
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     scaffold_aoc_day(year=args.year, day=args.day)
 
