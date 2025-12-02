@@ -3,7 +3,6 @@ from datetime import datetime
 import importlib
 import logging
 from pathlib import Path
-from typing import Optional
 from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
