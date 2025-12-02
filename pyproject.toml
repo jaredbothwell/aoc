@@ -1,0 +1,20 @@
+[project]
+name = "aoc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jared Bothwell", email = "jared.bothwell@hudl.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "requests>=2.32.5",
+]
+
+[project.scripts]
+aoc = "aoc:main"
+scaffold = "aoc.scaffold:main"
+
+[build-system]
+requires = ["uv_build>=0.9.14,<0.10.0"]
+build-backend = "uv_build"
