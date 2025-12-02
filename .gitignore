@@ -1,4 +1,4 @@
-
+**/input.txt
 .venv/
 __pycache__/
 *.pyc
