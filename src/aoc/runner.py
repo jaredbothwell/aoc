@@ -6,6 +6,8 @@ from pathlib import Path
 import sys
 from zoneinfo import ZoneInfo
 
+from dotenv import load_dotenv
+
 
 from aoc.paths import (
     get_input_file_path,
@@ -80,6 +82,7 @@ def run_solution(year: int, day: int, input_file: Path) -> None:
 
 
 def main() -> None:
+    load_dotenv()
     now = datetime.now(ZoneInfo("America/New_York"))
 
     parser = argparse.ArgumentParser(

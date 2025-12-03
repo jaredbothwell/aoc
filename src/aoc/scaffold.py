@@ -4,6 +4,7 @@ import logging
 import os
 from zoneinfo import ZoneInfo
 
+from dotenv import load_dotenv
 import requests
 
 from aoc.paths import (
@@ -47,10 +48,14 @@ def create_input_file(year: int, day: int) -> None:
     input_file_path = get_input_file_path(year, day)
     os.makedirs(input_file_path.parent, exist_ok=True)
     if input_file_path.exists():
-        logger.info(
-            f"Input file already exists at {input_file_path}, skipping creation."
-        )
-        return
+        with open(input_file_path, "r") as input_file:
+            existing_content = input_file.read()
+        # Only skip if file is non-empty
+        if existing_content.strip():
+            logger.info(
+                f"Input file already exists at {input_file_path}, skipping creation."
+            )
+            return
     logger.info(f"Creating input file at {input_file_path}")
     response_text = fetch_input_data(year, day)
 
@@ -87,6 +92,7 @@ def create_solution_file(year: int, day: int) -> None:
 
 
 def main() -> None:
+    load_dotenv()
     now = datetime.now(ZoneInfo("America/New_York"))
     parser = argparse.ArgumentParser(
         description="Scaffold a new Advent of Code day directory structure."
