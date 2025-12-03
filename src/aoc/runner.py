@@ -18,9 +18,13 @@ logger = logging.getLogger(__name__)
 
 def run_official_input(year: int, day: int) -> None:
     input_file = get_input_file_path(year, day)
+    display_path = Path(*input_file.parts[5:])
+
     logger.info("")
     logger.info("-" * 80)
-    logger.info(f"Running official input file: {input_file}")
+    logger.info(
+        f"Running solution for year {year} day {day} using official input file: {display_path}"
+    )
     run_solution(year, day, input_file)
 
 
@@ -31,9 +35,12 @@ def run_test_input(year: int, day: int) -> None:
     test_files.sort()
 
     for test_file in test_files:
+        display_path = Path(*test_file.parts[5:])
         logger.info("")
         logger.info("-" * 80)
-        logger.info(f"Running test input file: {test_file}")
+        logger.info(
+            f"Running solution for year {year} day {day} using test input file: {display_path}"
+        )
         run_solution(year, day, test_file)
 
 
