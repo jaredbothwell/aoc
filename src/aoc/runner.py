@@ -24,9 +24,10 @@ def run_official_input(year: int, day: int) -> None:
     run_solution(year, day, input_file)
 
 
+# TODO: select specific test file
 def run_test_input(year: int, day: int) -> None:
     test_dir = get_test_input_dir_path(year, day)
-    test_files = list(test_dir.glob("*.txt"))
+    test_files = list(test_dir.glob("*.txt"))  # TODO: filter for test_input_*.txt
     test_files.sort()
 
     for test_file in test_files:
@@ -58,13 +59,13 @@ def run_solution(year: int, day: int, input_file: Path) -> None:
             input_data = f.read().strip()
         if len(input_data) == 0:
             logger.error(f"Input file {input_file} is empty.")
-            sys.exit(1)
+            return
 
         part1, part2 = solution_module.solve(input_data)
 
     except Exception as e:
         logger.error(f"Error while running solve() in {module_name}: {e}")
-        sys.exit(1)
+        return
 
     logger.info(f"Part 1: {part1}")
     logger.info(f"Part 2: {part2}")
