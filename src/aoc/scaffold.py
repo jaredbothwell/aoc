@@ -1,23 +1,21 @@
 import argparse
+import datetime
 import logging
 import os
-from typing import Optional
+from zoneinfo import ZoneInfo
 
 import requests
 
-from aoc.format import (
-    format_input_file_path,
-    format_solution_file_path,
-    format_test_input_file_path,
+from aoc.paths import (
+    get_input_file_path,
+    get_solution_file_path,
+    get_default_test_input_file_path,
 )
-from aoc.utils import coerce_dates
 
 logger = logging.getLogger(__name__)
 
 
-def scaffold_aoc_day(year: Optional[int] = None, day: Optional[int] = None) -> None:
-    year, day = coerce_dates(year, day)
-
+def scaffold_aoc_day(year: int = None, day: int = None) -> None:
     # Create files if they do not exist
     create_input_file(year, day)
     create_test_input_file(year, day)
@@ -46,7 +44,7 @@ def fetch_input_data(year: int, day: int) -> str:
 
 
 def create_input_file(year: int, day: int) -> None:
-    input_file_path = format_input_file_path(year, day)
+    input_file_path = get_input_file_path(year, day)
     os.makedirs(input_file_path.parent, exist_ok=True)
     if input_file_path.exists():
         logger.info(
@@ -62,7 +60,7 @@ def create_input_file(year: int, day: int) -> None:
 
 
 def create_test_input_file(year: int, day: int) -> None:
-    test_input_file_path = format_test_input_file_path(year, day)
+    test_input_file_path = get_default_test_input_file_path(year, day)
     os.makedirs(test_input_file_path.parent, exist_ok=True)
     if test_input_file_path.exists():
         logger.info(
@@ -71,18 +69,11 @@ def create_test_input_file(year: int, day: int) -> None:
         return
     logger.info(f"Creating test input file at {test_input_file_path}")
     with open(test_input_file_path, "w") as test_input_file:
-        test_input_file.writelines(
-            [
-                '"""',
-                "Add your test input data here",
-                "Can have multiple test input files named test_input01.txt, test_input02.txt, etc.",
-                '"""',
-            ]
-        )
+        test_input_file.write("")
 
 
 def create_solution_file(year: int, day: int) -> None:
-    solution_file_path = format_solution_file_path(year, day)
+    solution_file_path = get_solution_file_path(year, day)
     if solution_file_path.exists():
         logger.info(
             f"Solution file already exists at {solution_file_path}, skipping creation."
@@ -96,17 +87,22 @@ def create_solution_file(year: int, day: int) -> None:
 
 
 def main() -> None:
+    now = datetime.now(ZoneInfo("America/New_York"))
     parser = argparse.ArgumentParser(
         description="Scaffold a new Advent of Code day directory structure."
     )
     parser.add_argument(
+        "-y",
         "--year",
         type=int,
+        default=now.year,
         help="The year of the Advent of Code (default: current year)",
     )
     parser.add_argument(
+        "-d",
         "--day",
         type=int,
+        default=now.day,
         help="The day of the Advent of Code (default: current day)",
     )
     args = parser.parse_args()

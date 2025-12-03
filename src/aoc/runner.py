@@ -1,24 +1,44 @@
 import argparse
+from datetime import datetime
 import importlib
 import logging
+from pathlib import Path
 import sys
-from typing import Optional
+from zoneinfo import ZoneInfo
 
 
-from aoc.format import (
-    format_input_file_path,
-    format_solution_module_name,
+from aoc.paths import (
+    get_input_file_path,
+    get_solution_module_name,
+    get_test_input_dir_path,
 )
-from aoc.utils import coerce_dates
 
 logger = logging.getLogger(__name__)
 
 
-def run_solution(year: Optional[int], day: Optional[int]) -> None:
-    year, day = coerce_dates(year, day)
-    module_name = format_solution_module_name(year, day)
-    input_file = format_input_file_path(year, day)
-    logger.info(f"Running AoC {year} Day {day:02d} solution from {module_name}")
+def run_official_input(year: int, day: int) -> None:
+    input_file = get_input_file_path(year, day)
+    logger.info("")
+    logger.info("-" * 80)
+    logger.info(f"Running official input file: {input_file}")
+    run_solution(year, day, input_file)
+
+
+def run_test_input(year: int, day: int) -> None:
+    test_dir = get_test_input_dir_path(year, day)
+    test_files = list(test_dir.glob("*.txt"))
+    test_files.sort()
+
+    for test_file in test_files:
+        logger.info("")
+        logger.info("-" * 80)
+        logger.info(f"Running test input file: {test_file}")
+        run_solution(year, day, test_file)
+
+
+def run_solution(year: int, day: int, input_file: Path) -> None:
+    module_name = get_solution_module_name(year, day)
+
     if not input_file.exists():
         logger.error(f"Input file not found: {input_file}")
         sys.exit(1)
@@ -35,30 +55,47 @@ def run_solution(year: Optional[int], day: Optional[int]) -> None:
 
     try:
         with open(input_file, "r") as f:
-            input_data = f.read()
+            input_data = f.read().strip()
+        if len(input_data) == 0:
+            logger.error(f"Input file {input_file} is empty.")
+            sys.exit(1)
+
         part1, part2 = solution_module.solve(input_data)
+
     except Exception as e:
         logger.error(f"Error while running solve() in {module_name}: {e}")
         sys.exit(1)
 
-    logger.info("------------------------------------------")
-    logger.info(f"Year {year} Day {day:02d} Solutions:")
     logger.info(f"Part 1: {part1}")
     logger.info(f"Part 2: {part2}")
-    logger.info("------------------------------------------")
+    logger.info("-" * 80)
 
 
 def main() -> None:
+    now = datetime.now(ZoneInfo("America/New_York"))
+
     parser = argparse.ArgumentParser(
         description="Run Advent of Code solution for a specific year and day."
     )
-    parser.add_argument("--year", type=int, help="Year of the Advent of Code")
-    parser.add_argument("--day", type=int, help="Day of the Advent of Code")
+    parser.add_argument(
+        "-y", "--year", type=int, default=now.year, help="Year of the Advent of Code"
+    )
+    parser.add_argument(
+        "-d", "--day", type=int, default=now.day, help="Day of the Advent of Code"
+    )
+
+    parser.add_argument(
+        "-t",
+        "--test",
+        default=False,
+        action="store_true",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-    run_solution(year=args.year, day=args.day)
+    runner_function = run_test_input if args.test else run_official_input
+    runner_function(year=args.year, day=args.day)
 
 
 if __name__ == "__main__":

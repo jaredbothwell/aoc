@@ -1,3 +1,6 @@
+from typing import Callable
+
+
 def part1_validation(num: int) -> bool:
     num_str = str(num)
     num_len = len(num_str)
@@ -25,7 +28,7 @@ def part2_validation(num: int) -> bool:
     return False
 
 
-def sum_invalid_numbers(input_data: str, check_function: callable[[int], bool]) -> int:
+def sum_invalid_numbers(input_data: str, check_function: Callable[[int], bool]) -> int:
     ranges = [x.split("-") for x in input_data.split(",")]
     invalid_nums = set()
     for start, end in ranges:
