@@ -1,4 +1,4 @@
-def part1_validation(num):
+def part1_validation(num: int) -> bool:
     num_str = str(num)
     num_len = len(num_str)
     if num_len % 2 != 0:
@@ -10,7 +10,7 @@ def part1_validation(num):
     return first_half == second_half
 
 
-def part2_validation(num):
+def part2_validation(num: int) -> bool:
     num_str = str(num)
     num_len = len(num_str)
     if num_len < 2:
@@ -25,7 +25,7 @@ def part2_validation(num):
     return False
 
 
-def sum_invalid_numbers(input_data, check_function):
+def sum_invalid_numbers(input_data: str, check_function: callable[[int], bool]) -> int:
     ranges = [x.split("-") for x in input_data.split(",")]
     invalid_nums = set()
     for start, end in ranges:
@@ -38,7 +38,7 @@ def sum_invalid_numbers(input_data, check_function):
     return sum(invalid_nums)
 
 
-def solve(input_data):
+def solve(input_data: str) -> tuple[int, int]:
     part1 = sum_invalid_numbers(input_data, part1_validation)
     part2 = sum_invalid_numbers(input_data, part2_validation)
     return part1, part2

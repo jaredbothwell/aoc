@@ -1,4 +1,4 @@
-def part1(input_data):
+def part1(input_data: str) -> int:
     count = 0
     dial = 50
     lines = input_data.strip().splitlines()
@@ -15,7 +15,7 @@ def part1(input_data):
     return count
 
 
-def part2(input_data):
+def part2(input_data: str) -> int:
     count = 0
     dial = 50
     lines = input_data.strip().splitlines()
@@ -30,5 +30,5 @@ def part2(input_data):
     return count
 
 
-def solve(input_data):
+def solve(input_data: str) -> tuple[int, int]:
     return part1(input_data), part2(input_data)
