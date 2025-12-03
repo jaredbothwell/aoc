@@ -1,5 +1,5 @@
 import argparse
-import datetime
+from datetime import datetime
 import logging
 import os
 from zoneinfo import ZoneInfo
