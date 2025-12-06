@@ -1,25 +1,27 @@
 import argparse
-from datetime import datetime
 import logging
 import os
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from dotenv import load_dotenv
 import requests
+from dotenv import load_dotenv
 
 from aoc.paths import (
     get_input_file_path,
     get_solution_file_path,
-    get_default_test_input_file_path,
+    get_test_file_path,
+    solution_template_file_path,
+    test_template_file_path,
 )
 
 logger = logging.getLogger(__name__)
 
 
-def scaffold_aoc_day(year: int = None, day: int = None) -> None:
+def scaffold_aoc_day(year: int, day: int) -> None:
     # Create files if they do not exist
     create_input_file(year, day)
-    create_test_input_file(year, day)
+    create_test_file(year, day)
     create_solution_file(year, day)
 
     logger.info(f"Created scaffold for AoC {year} Day {day:02d}")
@@ -64,17 +66,17 @@ def create_input_file(year: int, day: int) -> None:
     logger.info(f"Created input file at {input_file_path}")
 
 
-def create_test_input_file(year: int, day: int) -> None:
-    test_input_file_path = get_default_test_input_file_path(year, day)
-    os.makedirs(test_input_file_path.parent, exist_ok=True)
-    if test_input_file_path.exists():
-        logger.info(
-            f"Test input file already exists at {test_input_file_path}, skipping creation."
-        )
+def create_test_file(year: int, day: int) -> None:
+    test_file_path = get_test_file_path(year, day)
+    os.makedirs(test_file_path.parent, exist_ok=True)
+    if test_file_path.exists():
+        logger.info(f"Test file already exists at {test_file_path}, skipping creation.")
         return
-    logger.info(f"Creating test input file at {test_input_file_path}")
-    with open(test_input_file_path, "w") as test_input_file:
-        test_input_file.write("")
+    logger.info(f"Creating test file at {test_file_path}")
+    with open(test_template_file_path, "r") as template_file:
+        template_content = template_file.read()
+    with open(test_file_path, "w") as test_file:
+        test_file.write(template_content)
 
 
 def create_solution_file(year: int, day: int) -> None:
@@ -85,7 +87,7 @@ def create_solution_file(year: int, day: int) -> None:
         )
         return
     logger.info(f"Creating solution file at {solution_file_path}")
-    with open("src/aoc/template_solution.py", "r") as template_file:
+    with open(solution_template_file_path, "r") as template_file:
         template_content = template_file.read()
     with open(solution_file_path, "w") as solution_file:
         solution_file.write(template_content)

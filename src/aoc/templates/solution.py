@@ -6,7 +6,7 @@ def part2(parsed_data: str) -> int:
     pass
 
 
-def parse_input(input_data: str):
+def parse_input(input_data: str) -> str:
     pass
 
 

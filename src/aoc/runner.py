@@ -1,24 +1,47 @@
 import argparse
-from datetime import datetime
 import importlib
 import logging
-from pathlib import Path
 import sys
+from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
-
 from aoc.paths import (
     get_input_file_path,
     get_solution_module_name,
-    get_test_input_dir_path,
+    get_test_module_name,
 )
 
 logger = logging.getLogger(__name__)
 
 
-def run_official_input(year: int, day: int) -> None:
+def run_tests(year: int, day: int) -> None:
+    test_module_name = get_test_module_name(year, day)
+
+    try:
+        module = importlib.import_module(test_module_name)
+    except ImportError as e:
+        logger.error(f"Could not import module {test_module_name}: {e}")
+        sys.exit(1)
+
+    if not hasattr(module, "test_solution"):
+        logger.error(f"No test_solution found in {test_module_name}")
+        sys.exit(1)
+
+    try:
+
+        module.test_solution()
+    except AssertionError as e:
+        logger.error(f"Failed test: {e}")
+    except Exception as e:
+        logger.error(
+            f"Error while running test_solution() in {test_module_name}: {e}")
+        return
+
+
+def run_solution(year: int, day: int) -> None:
     input_file = get_input_file_path(year, day)
     display_path = Path(*input_file.parts[5:])
 
@@ -27,26 +50,6 @@ def run_official_input(year: int, day: int) -> None:
     logger.info(
         f"Running solution for year {year} day {day} using official input file: {display_path}"
     )
-    run_solution(year, day, input_file)
-
-
-# TODO: select specific test file
-def run_test_input(year: int, day: int) -> None:
-    test_dir = get_test_input_dir_path(year, day)
-    test_files = list(test_dir.glob("*.txt"))  # TODO: filter for test_input_*.txt
-    test_files.sort()
-
-    for test_file in test_files:
-        display_path = Path(*test_file.parts[5:])
-        logger.info("")
-        logger.info("-" * 80)
-        logger.info(
-            f"Running solution for year {year} day {day} using test input file: {display_path}"
-        )
-        run_solution(year, day, test_file)
-
-
-def run_solution(year: int, day: int, input_file: Path) -> None:
     module_name = get_solution_module_name(year, day)
 
     if not input_file.exists():
@@ -105,7 +108,7 @@ def main() -> None:
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-    runner_function = run_test_input if args.test else run_official_input
+    runner_function = run_tests if args.test else run_solution
     runner_function(year=args.year, day=args.day)
 
 
