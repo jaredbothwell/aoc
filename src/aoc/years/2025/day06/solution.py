@@ -9,49 +9,50 @@ from typing import Callable
 
 @dataclass
 class Problem:
-    numbers: list[int]
-    operator: Callable[[int, int], int]
+    nums: list[int]
+    op: Callable[[int, int], int]
 
 
-def parse_int(s: str) -> int:
-    return int(s.strip('+').strip('*').strip())
+operator_map = {
+    "+": add,
+    "*": mul
+}
 
 
 def compute_problems(problems: list[Problem]) -> int:
-    total = 0
-    for problem in problems:
-        numbers = problem.numbers
-        func = problem.operator
-        total += reduce(func, numbers)
-    return total
+    return sum(reduce(p.op, p.nums) for p in problems)
 
 
-def parse_part2(input_data: str) -> list[Problem]:
-    lines = input_data.splitlines()
-    columns = [''.join(x) for x in zip_longest(*lines, fillvalue=' ')]
-    groups = [list(g) for k, g in groupby(
-        columns, key=lambda x: x.strip() == '') if not k]
-    problems = [Problem(
-        numbers=list(map(parse_int, group)),
-        operator=add if group[0][-1] == "+" else mul
-    ) for group in groups]
-    return problems
-
-
-def parse_part1(input_data: str) -> list[Problem]:
-    lines = input_data.strip().splitlines()
-    nums = [list(map(int, line.split())) for line in lines[:-1]]
-    operators = lines[-1].split()
+def part1(lines: list[str], operators: list[Callable[[int, int], int]]) -> list[Problem]:
+    numbers_grid = [list(map(int, line.split())) for line in lines]
     problems = [
         Problem(
-            numbers=[nums[row][col]for row in range(len(nums))],
-            operator=add if operators[col] == "+" else mul)
-        for col in range(len(nums[0]))
+            nums=[numbers_grid[row][col] for row in range(len(numbers_grid))],
+            op=operators[col])
+        for col in range(len(numbers_grid[0]))
     ]
     return problems
 
 
+def part2(lines: list[str], operators: list[Callable[[int, int], int]]) -> list[Problem]:
+    columns = [''.join(x).strip() for x in zip_longest(*lines, fillvalue=' ')]
+    groups = [list(group) for key, group in groupby(
+        columns, key=lambda x: x == '') if not key]
+    problems = [Problem(
+        nums=list(map(int, group)),
+        op=operators[i]
+    ) for i, group in enumerate(groups)]
+    return problems
+
+
+def parse_input(input_data: str) -> tuple[list[str], list[Callable[[int, int], int]]]:
+    lines = input_data.splitlines()
+    operators = [operator_map[op] for op in lines[-1].split()]
+    return lines[:-1], operators
+
+
 def solve(input_data: str) -> tuple[int, int]:
-    part1_data = parse_part1(input_data)
-    part2_data = parse_part2(input_data)
+    number_lines, operators = parse_input(input_data)
+    part1_data = part1(number_lines, operators)
+    part2_data = part2(number_lines, operators)
     return compute_problems(part1_data), compute_problems(part2_data)
