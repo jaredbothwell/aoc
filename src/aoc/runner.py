@@ -4,6 +4,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
+import traceback
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
@@ -35,7 +36,8 @@ def run_tests(year: int, day: int) -> None:
     except AssertionError as e:
         logger.error(f"Failed test: {e}")
     except Exception as e:
-        logger.error(f"Error while running test_solution() in {test_module_name}: {e}")
+        logger.error(
+            f"Error while running test_solution() in {test_module_name}: {e}")
         return
 
 
@@ -75,6 +77,8 @@ def run_solution(year: int, day: int) -> None:
 
     except Exception as e:
         logger.error(f"Error while running solve() in {module_name}: {e}")
+        traceback.print_exc()
+
         return
 
     logger.info(f"Part 1: {part1}")
