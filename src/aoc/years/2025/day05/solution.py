@@ -1,5 +1,3 @@
-
-
 from aoc.utils.interval import ClosedInterval
 
 
