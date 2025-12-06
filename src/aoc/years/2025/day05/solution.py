@@ -1,26 +1,6 @@
-from dataclasses import dataclass
 
 
-@dataclass
-class ClosedInterval:
-    start: int
-    end: int
-
-    def __post_init__(self):
-        if self.start > self.end:
-            raise ValueError(
-                f"Invalid interval with start greater than end: start={self.start}, end={self.end}"
-            )
-
-    @property
-    def size(self) -> int:
-        return self.end - self.start + 1
-
-    def contains(self, value: int) -> bool:
-        return self.start <= value <= self.end
-
-    def can_merge_with(self, other: "ClosedInterval") -> bool:
-        return self.start <= other.end + 1 and other.start <= self.end + 1
+from aoc.utils.interval import ClosedInterval
 
 
 def part1(merged_intervals: list[ClosedInterval], values: list[int]) -> int:
@@ -56,7 +36,8 @@ def merge_intervals(intervals: list[ClosedInterval]) -> list[ClosedInterval]:
 def parse_input(input_data: str) -> tuple[list[ClosedInterval], list[int]]:
     top, bottom = input_data.split("\n\n")
     intervals = sorted(
-        [ClosedInterval(*map(int, line.split("-"))) for line in top.splitlines()],
+        [ClosedInterval(*map(int, line.split("-")))
+         for line in top.splitlines()],
         key=lambda x: x.start,
     )
     values = sorted(map(int, bottom.splitlines()))
