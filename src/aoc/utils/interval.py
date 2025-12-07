@@ -12,8 +12,7 @@ class ClosedInterval:
                 f"Invalid interval with start greater than end: start={self.start}, end={self.end}"
             )
 
-    @property
-    def size(self) -> int:
+    def __len__(self) -> int:
         return self.end - self.start + 1
 
     def contains(self, value: int) -> bool:

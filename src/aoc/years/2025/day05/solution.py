@@ -17,7 +17,7 @@ def part1(merged_intervals: list[ClosedInterval], values: list[int]) -> int:
 
 
 def part2(merged_intervals: list[ClosedInterval]) -> int:
-    return sum(interval.size for interval in merged_intervals)
+    return sum(len(interval) for interval in merged_intervals)
 
 
 def merge_intervals(intervals: list[ClosedInterval]) -> list[ClosedInterval]:
