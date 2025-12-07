@@ -30,7 +30,7 @@ def part2_validation(num: int) -> bool:
 
 def sum_invalid_numbers(input_data: str, check_function: Callable[[int], bool]) -> int:
     ranges = [x.split("-") for x in input_data.split(",")]
-    invalid_nums = set()
+    invalid_nums: set[int] = set()
     for start, end in ranges:
         for num in range(int(start), int(end) + 1):
             if num in invalid_nums:

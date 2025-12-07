@@ -1,7 +1,7 @@
 from functools import reduce
 
 
-def pick_from_bank(remaining: list[int], count: int) -> int:
+def pick_from_bank(remaining: list[int], count: int) -> list[int]:
     end = len(remaining) - count + 1
     max_val = max(remaining[:end])
     max_index = remaining.index(max_val)

@@ -11,8 +11,8 @@ def neighbor_positions(x: int, y: int) -> list[tuple[int, int]]:
     ]
 
 
-def bounded_neighbors(x: int, y: int, grid: list[list[str]]) -> list[tuple[int, int]]:
-    neighbors = []
+def bounded_neighbors(x: int, y: int, grid: list[list[str]]) -> list[str]:
+    neighbors: list[str] = []
     for nx, ny in neighbor_positions(x, y):
         if 0 <= nx and nx < len(grid[0]) and 0 <= ny and ny < len(grid):
             neighbors.append(grid[ny][nx])
@@ -20,7 +20,7 @@ def bounded_neighbors(x: int, y: int, grid: list[list[str]]) -> list[tuple[int, 
 
 
 def find_removable_positions(grid: list[list[str]]) -> list[tuple[int, int]]:
-    removable_positions = []
+    removable_positions: list[tuple[int, int]] = []
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if cell != "@":
