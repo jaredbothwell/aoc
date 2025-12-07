@@ -1,5 +1,3 @@
-
-
 from dataclasses import dataclass
 from functools import reduce
 from itertools import groupby, zip_longest
@@ -13,35 +11,38 @@ class Problem:
     op: Callable[[int, int], int]
 
 
-operator_map = {
-    "+": add,
-    "*": mul
-}
+operator_map = {"+": add, "*": mul}
 
 
 def compute_problems(problems: list[Problem]) -> int:
     return sum(reduce(p.op, p.nums) for p in problems)
 
 
-def part1(lines: list[str], operators: list[Callable[[int, int], int]]) -> list[Problem]:
+def part1(
+    lines: list[str], operators: list[Callable[[int, int], int]]
+) -> list[Problem]:
     numbers_grid = [list(map(int, line.split())) for line in lines]
     problems = [
         Problem(
             nums=[numbers_grid[row][col] for row in range(len(numbers_grid))],
-            op=operators[col])
+            op=operators[col],
+        )
         for col in range(len(numbers_grid[0]))
     ]
     return problems
 
 
-def part2(lines: list[str], operators: list[Callable[[int, int], int]]) -> list[Problem]:
-    columns = [''.join(x).strip() for x in zip_longest(*lines, fillvalue=' ')]
-    groups = [list(group) for key, group in groupby(
-        columns, key=lambda x: x == '') if not key]
-    problems = [Problem(
-        nums=list(map(int, group)),
-        op=operators[i]
-    ) for i, group in enumerate(groups)]
+def part2(
+    lines: list[str], operators: list[Callable[[int, int], int]]
+) -> list[Problem]:
+    columns = ["".join(x).strip() for x in zip_longest(*lines, fillvalue=" ")]
+    groups = [
+        list(group) for key, group in groupby(columns, key=lambda x: x == "") if not key
+    ]
+    problems = [
+        Problem(nums=list(map(int, group)), op=operators[i])
+        for i, group in enumerate(groups)
+    ]
     return problems
 
 

@@ -4,7 +4,7 @@ from .solution import solve
 
 test_input: list[tuple[str, int, int]] = [
     (
-"""123 328  51 64 
+        """123 328  51 64 
  45 64  387 23 
   6 98  215 314
 *   +   *   +  """,

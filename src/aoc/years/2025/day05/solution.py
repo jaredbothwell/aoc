@@ -34,8 +34,7 @@ def merge_intervals(intervals: list[ClosedInterval]) -> list[ClosedInterval]:
 def parse_input(input_data: str) -> tuple[list[ClosedInterval], list[int]]:
     top, bottom = input_data.split("\n\n")
     intervals = sorted(
-        [ClosedInterval(*map(int, line.split("-")))
-         for line in top.splitlines()],
+        [ClosedInterval(*map(int, line.split("-"))) for line in top.splitlines()],
         key=lambda x: x.start,
     )
     values = sorted(map(int, bottom.splitlines()))
