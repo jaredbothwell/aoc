@@ -37,6 +37,8 @@ def run_tests(year: int, day: int) -> None:
         logger.error(f"Failed test: {e}")
     except Exception as e:
         logger.error(f"Error while running test_solution() in {test_module_name}: {e}")
+        traceback.print_exc()
+
         return
 
 
