@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from functools import reduce
-import math
 
 
 @dataclass
@@ -22,16 +21,15 @@ class Line3:
     end: Vec3
 
     @property
-    def distance(self) -> float:
-        return math.sqrt(
+    def inverse(self) -> "Line3":
+        return Line3(start=self.end, end=self.start)
+
+    def __len__(self) -> int:
+        return (
             (self.end.x - self.start.x) ** 2
             + (self.end.y - self.start.y) ** 2
             + (self.end.z - self.start.z) ** 2
         )
-
-    @property
-    def inverse(self) -> "Line3":
-        return Line3(start=self.end, end=self.start)
 
     def __hash__(self) -> int:
         return hash((self.start, self.end))
@@ -105,7 +103,7 @@ def sorted_lines(
                 continue
             lines.add(line)
 
-    return sorted(lines, key=lambda line: line.distance)
+    return sorted(lines, key=lambda line: len(line))
 
 
 def parse_input(input_data: str) -> list[Vec3]:
